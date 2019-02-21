@@ -80,11 +80,13 @@ function runConcert(artist) {
 function runMovie(title) {
     axios.get('http://www.omdbapi.com/?i=tt3896198&apikey=55e8eecb&t=' + title) 
     .then(function (response) {
-        for (i = 0; i < response.data.length; i++) {
-        }
+        // for (i = 0; i < response.data.length; i++) {
+        // }
+        console.log(response.data);
         console.log("Title: ", response.data.Title);
         console.log("Year: ", response.data.Year);
         console.log("Rating: ", response.data.imdbRating);
+        console.log("Rotten Tomatoes: ", response.data.Ratings[1].Value);
         console.log("Country: ", response.data.Country);
         console.log("Language: ", response.data.Language);
         console.log("Plot: ", response.data.Plot);
