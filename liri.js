@@ -80,8 +80,6 @@ function runConcert(artist) {
 function runMovie(title) {
     axios.get('http://www.omdbapi.com/?i=tt3896198&apikey=55e8eecb&t=' + title) 
     .then(function (response) {
-        // for (i = 0; i < response.data.length; i++) {
-        // }
         console.log(response.data);
         console.log("Title: ", response.data.Title);
         console.log("Year: ", response.data.Year);
