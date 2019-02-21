@@ -1,8 +1,10 @@
 require("dotenv").config();
 
 var keys = require("./keys.js");
-var Spotify = require('node-spotify-api');
+var Spotify = require("node-spotify-api");
 var axios = require("axios");
+var moment = require("moment");
+
 
 var userInput = process.argv[2];
 var query = process.argv[3];
@@ -16,9 +18,14 @@ if (userInput === "spotify-this-song") {
     runConcert(query);
     console.log("Concert This!");
 } else if (userInput === "movie-this") {
+    var movieQuery = process.argv.slice(3)
+    console.log(movieQuery);
+    runMovie(movieQuery);
     console.log("Movie This!")
 } else if (userInput === "do-what-it-says") {
     console.log("Do What It Says")
+} else {
+    console.log("Try Again!!!")
 };
 
 function runSpotify(spotifyQuery) {
@@ -57,8 +64,9 @@ function runConcert(artist) {
         .then(function (response) {
             for (i = 0; i < response.data.length; i++) {
                 console.log(response.data[i].venue.name);
+                console.log(response.data[i].venue.city);
                 console.log(response.data[i].venue.country);
-                var dateTime = (response.data[i].datetime);
+                var dateTime = moment(response.data[i].datetime).format("MM/DD/YYYY");
                 console.log(dateTime);
                 console.log("-----------------------------");
             }
@@ -68,3 +76,18 @@ function runConcert(artist) {
         });
 
 }
+
+function runMovie(title) {
+    axios.get('http://www.omdbapi.com/?i=tt3896198&apikey=55e8eecb&t=' + title) 
+    .then(function (response) {
+        for (i = 0; i < response.data.length; i++) {
+        }
+        console.log("Title: ", response.data.Title);
+        console.log("Year: ", response.data.Year);
+        console.log("Rating: ", response.data.imdbRating);
+        console.log("Country: ", response.data.Country);
+        console.log("Language: ", response.data.Language);
+        console.log("Plot: ", response.data.Plot);
+        console.log("Actors: ", response.data.Actors);
+    })
+};
