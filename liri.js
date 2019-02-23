@@ -4,29 +4,43 @@ var keys = require("./keys.js");
 var Spotify = require("node-spotify-api");
 var axios = require("axios");
 var moment = require("moment");
+var fs = require("fs");
 
 
 var userInput = process.argv[2];
-var query = process.argv[3];
+    if (process.argv[3] != undefined){
+        var queryFromCommandLine = process.argv.slice(3).join(" ")
+    }
+    else var queryFromCommandLine = undefined;
 
-if (userInput === "spotify-this-song") {
-    var songQuery = process.argv.slice(3)
-    console.log(songQuery);
-    runSpotify(songQuery);
-    console.log("Spotify This Song!") 
-} else if (userInput === "concert-this") {
-    runConcert(query);
-    console.log("Concert This!");
-} else if (userInput === "movie-this") {
-    var movieQuery = process.argv.slice(3)
-    console.log(movieQuery);
-    runMovie(movieQuery);
-    console.log("Movie This!")
-} else if (userInput === "do-what-it-says") {
-    console.log("Do What It Says")
-} else {
-    console.log("Try Again!!!")
-};
+
+
+function handleUserInput(userInput, queryPassedIntoFunction) {
+
+    if (userInput === "spotify-this-song") {
+        var songQuery = queryPassedIntoFunction
+        console.log(songQuery);
+        runSpotify(songQuery);
+        console.log("Spotify This Song!")
+    } else if (userInput === "concert-this") {
+        runConcert(queryPassedIntoFunction);
+        console.log("Concert This!");
+    } else if (userInput === "movie-this") {
+        var movieQuery = queryPassedIntoFunction
+        console.log(movieQuery);
+        runMovie(movieQuery);
+        console.log("Movie This!")
+    } else if (userInput === "do-what-it-says") {
+        runDoit();
+        console.log("Do What It Says")
+    } else {
+        console.log("Try Again!!!")
+    };
+
+}
+handleUserInput(userInput, queryFromCommandLine);
+
+
 
 function runSpotify(spotifyQuery) {
 
@@ -78,16 +92,33 @@ function runConcert(artist) {
 }
 
 function runMovie(title) {
-    axios.get('http://www.omdbapi.com/?i=tt3896198&apikey=55e8eecb&t=' + title) 
-    .then(function (response) {
-        console.log(response.data);
-        console.log("Title: ", response.data.Title);
-        console.log("Year: ", response.data.Year);
-        console.log("Rating: ", response.data.imdbRating);
-        console.log("Rotten Tomatoes: ", response.data.Ratings[1].Value);
-        console.log("Country: ", response.data.Country);
-        console.log("Language: ", response.data.Language);
-        console.log("Plot: ", response.data.Plot);
-        console.log("Actors: ", response.data.Actors);
-    })
-};
+    if (title === undefined) {
+        title = "Mr. Nobody";
+    }
+    axios.get('http://www.omdbapi.com/?i=tt3896198&apikey=55e8eecb&t=' + title)
+        .then(function (response) {
+            console.log("Title: ", response.data.Title);
+            console.log("Year: ", response.data.Year);
+            console.log("Rating: ", response.data.imdbRating);
+            console.log("Rotten Tomatoes: ", response.data.Ratings[1].Value);
+            console.log("Country: ", response.data.Country);
+            console.log("Language: ", response.data.Language);
+            console.log("Plot: ", response.data.Plot);
+            console.log("Actors: ", response.data.Actors);
+        })
+}
+
+function runDoit() {
+    fs.readFile('random.txt', "utf8", function (err, textFromFile) {
+        // console.log(textFromFile);
+        var x = textFromFile.split(',');
+        console.log(x);
+        var command = x[0];
+        var FromRandomTextFile = x[1];
+        // runSpotify(query);
+        handleUserInput(command, FromRandomTextFile);
+    });
+}
+
+// split the string into the command and the query 
+//
