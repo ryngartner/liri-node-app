@@ -8,10 +8,9 @@ var fs = require("fs");
 
 
 var userInput = process.argv[2];
-    if (process.argv[3] != undefined){
-        var queryFromCommandLine = process.argv.slice(3).join(" ")
-    }
-    else var queryFromCommandLine = undefined;
+if (process.argv[3] != undefined) {
+    var queryFromCommandLine = process.argv.slice(3).join(" ")
+} else var queryFromCommandLine = undefined;
 
 
 
