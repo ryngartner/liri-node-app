@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+//Set require variables
 var keys = require("./keys.js");
 var Spotify = require("node-spotify-api");
 var axios = require("axios");
@@ -7,13 +8,14 @@ var moment = require("moment");
 var fs = require("fs");
 
 
+//Set user input variable
 var userInput = process.argv[2];
 if (process.argv[3] != undefined) {
     var queryFromCommandLine = process.argv.slice(3).join(" ")
 } else var queryFromCommandLine = undefined;
 
 
-
+//Set a function to handle user input 
 function handleUserInput(userInput, queryPassedIntoFunction) {
 
     if (userInput === "spotify-this-song") {
@@ -40,7 +42,7 @@ function handleUserInput(userInput, queryPassedIntoFunction) {
 handleUserInput(userInput, queryFromCommandLine);
 
 
-
+//Spotify-this-song function
 function runSpotify(spotifyQuery) {
 
     var spotify = new Spotify(keys.spotify);
@@ -72,6 +74,7 @@ function runSpotify(spotifyQuery) {
     });
 };
 
+//Concert-this function
 function runConcert(artist) {
     axios.get('https://rest.bandsintown.com/artists/' + artist + '/events?app_id=codingbootcamp')
         .then(function (response) {
@@ -90,6 +93,7 @@ function runConcert(artist) {
 
 }
 
+//Movie-this function
 function runMovie(title) {
     if (title === undefined) {
         title = "Mr. Nobody";
@@ -107,6 +111,7 @@ function runMovie(title) {
         })
 }
 
+//Do-what-it-says function
 function runDoit() {
     fs.readFile('random.txt', "utf8", function (err, textFromFile) {
         // console.log(textFromFile);
@@ -118,6 +123,3 @@ function runDoit() {
         handleUserInput(command, FromRandomTextFile);
     });
 }
-
-// split the string into the command and the query 
-//
